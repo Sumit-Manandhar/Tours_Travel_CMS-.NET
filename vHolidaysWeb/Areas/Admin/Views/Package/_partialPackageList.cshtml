@@ -1,0 +1,73 @@
+﻿@using vHolidays.Models.Package.DatabaseModel
+@model List<PackageDetail>
+@{
+    Layout = null;
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive" style="margin-top:20px">
+                 <table class="table customize-table table-bordered mb-0 v-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>
+                                id
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <td>
+                                Is Active
+                            </td>
+                            <td>Actions</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model is not null && Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.Id </td>
+                                    <td>@item.Name </td>
+                                    <td>@item.IsActive </td>
+                                    <td>
+                                        <a href="#" class="link" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item btn-edit" href="@Url.Action("Edit",controller,new{@Id=item.Id})" data-id="@item.Id"><i class="fa-solid fa-pen"></i> Edit </a></li>
+                                            <li><a class="dropdown-item btn-delete" href="javascript:void(0)" data-id="@item.Id"><i class="fa-solid fa-trash"></i> Delete </a></li>
+
+                                            @if (!IsGroupBooking)
+                                            {
+
+                                                <li><a class="dropdown-item btn-sync" href="javascript:void(0)" data-id="@item.Id" data-depDate="@item.StartDate"><i class="fa-solid fa-rotate"></i> Sync to Group Departure </a></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="text-center">
+                                        <h5 class="card-title">No @displayText Found</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

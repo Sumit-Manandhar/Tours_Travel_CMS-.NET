@@ -1,0 +1,238 @@
+﻿@using vHolidays.DataAccess.Repository.Common.Interface
+@using vHolidays.Models.SupplyPartner.DataTransferObjects;
+@using vHolidays.Utility.Enumerations
+@model SupplierDetailCreateModel
+@inject IUtilityService _utilities
+@{
+    var supplies = await _utilities.GetProductSupplies();
+    ViewData["Title"] = "Vendor Registration";
+}
+<section class="page-header pt-60 pb-60">
+    <div class="container">
+        <div class="row justify-content-center ">
+            <div class="col-md-8">
+                <h2 class="page-header__title wow animated fadeInLeft animated text-center"
+                    data-wow-delay="0s"
+                    data-wow-duration="1500ms"
+                    style="visibility: visible; animation-duration: 1500ms; animation-delay: 0s; animation-name: fadeInLeft;">
+                    Partnership Opportunity
+                </h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="checkout-page mt-2">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <div class="col-xl-8 col-lg-8 login-page__inner-container ">
+                <h2 class="d-flex mb-1">Join us as a supply partner</h2>
+                <small>Please type the details below and send back to us via email. Please DO NOT Send scanned copies</small>
+
+                <h4 class="mt-3">Supplier Details</h4>
+
+                <form asp-action="Create" asp-controller="Vendor" method="post" id="creatVendorForm" class="step-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name :</label>
+                            <small>(As per name in your bank account)    </small>
+                            <input type="text" asp-for="Name" class="form-control" placeholder="Type your full name">
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6">
+                            <label>Address1 :</label>
+                            <input type="text" asp-for="Address1" class="form-control" placeholder="Type your primary address">
+                            @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Address2 :</label>
+                            <input type="text" asp-for="Address2" class="form-control" placeholder="Type your secondary address">
+                            @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Country :</label>
+                            @Html.DropDownListFor(model => model.CountryId, new SelectList(Model.Countries, "Id", "CountryName"),
+                                     new { @class = "form-select mr-sm-2 select2init" })
+                            @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6">
+                            <label>State :</label>
+                            @Html.DropDownListFor(model => model.StateId, new SelectList(Model.Countries, "Id", "CountryName"),
+                                     new { @class = "form-select mr-sm-2 select2init" })
+                            @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Zip :</label>
+                            <input type="text" asp-for="Zip" class="form-control" placeholder="Type your Zip">
+                            @Html.ValidationMessageFor(model => model.Zip, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>City :</label>
+                            @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Countries, "Id", "CountryName"),
+                                     new { @class = "form-select mr-sm-2 select2init" })
+                            @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Currency :</label>
+                            @Html.DropDownListFor(model => model.Currency, new SelectList(Model.CurrencyList, "Value", "Text"),
+                                     new { @class = "form-select mr-sm-2 select2init" })
+                            <small>(currency in which you will provide us the rates)</small>
+                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label>Updated Tel : </label>
+                            <input type="text" asp-for="UpdatedTel" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.UpdatedTel, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Updated Fax :  </label>
+                            <input type="text" asp-for="UpdatedFax" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.UpdatedFax, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6">
+                            <label>Website : </label>
+                            <input type="text" asp-for="Website" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Central Email : </label>
+                            <input type="email" asp-for="CentralEmail" class="form-control" placeholder="">
+                            <small style="line-height: 18px; display: block; margin-top: 5px;">(All correspondence will be automatically copied to this email as well)</small>
+                            @Html.ValidationMessageFor(model => model.CentralEmail, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Reservation Email 1 :</label>
+                            <input type="email" asp-for="ReservationEmail1" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.ReservationEmail1, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Reservation Email 2 :</label>
+                            <input type="email" asp-for="ReservationEmail2" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.ReservationEmail2, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-md-12">
+                            <label>License:</label>
+                            <input type="text" asp-for="License" class="form-control" placeholder="">
+                            @Html.ValidationMessageFor(model => model.License, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div>
+                            <div class="col-md-12">
+                                <label class="mb-2">Destination(s) for which you supply:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Country:</label>
+                                    <select asp-for="Destination[0].CountryId" onchange="handleCity('Destination_0__','true')"
+                                            asp-items="@(new SelectList(Model.Countries, "Id", "CountryName"))"
+                                            class="form-select mr-sm-2 select2init"> </select>
+                                    @Html.ValidationMessageFor(model => model.Destination[0].CountryId, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cities:</label>
+                                    <select asp-for="Destination[0].CityId"
+                                            asp-items="@(new SelectList(Model.Countries, "Id", "CountryName"))"
+                                            multiple="multiple" class="form-select mr-sm-2 select2init"> </select>
+                                    @* @Html.DropDownListFor(model => model.Destination[0].Cities, new SelectList(Model.Countries, "Id", "CountryName"),
+                                    new { @class = "form-select mr-sm-2" }) *@
+                                    @Html.ValidationMessageFor(model => model.Destination[0].CityId, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="mb-2">What Products do you supply?</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                @for (int i = 0; i < supplies.Count(); i++)
+                                {
+                                    var option = supplies[i];
+                                    string checkboxId = $"checkbox_{i}";
+                                    <div class="checkout-page__check-box col-md-3 mb-2">
+                                        <input type="checkbox" id="@checkboxId" name="ProductIds" value="@supplies[i].Value"
+                                        @(Model.ProductIds.Contains(int.Parse(supplies[i].Value)) ? "checked" : "") />
+                                        <label for="@checkboxId">@supplies[i].Text<span></span></label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @foreach (VendorContactEnum option in Enum.GetValues(typeof(VendorContactEnum)))
+                    {
+                        var index = (int)option - 1;
+                        Model.Contact[index].Type = option;
+                        @Html.HiddenFor(x => x.Contact[index].Type)
+                        <h4 class="mt-40">
+                            @option.ToString()
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name :</label>
+                                <input type="text" asp-for="Contact[index].Name" class="form-control" placeholder="Full Name">
+                                @Html.ValidationMessageFor(model => model.Contact[index].Name, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="col-md-6">
+                                <label>Designation :</label>
+                                <input type="text" asp-for="Contact[index].Designation" class="form-control" placeholder="Designation">
+                                @Html.ValidationMessageFor(model => model.Contact[index].Designation, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="col-md-4">
+                                <label>Email :</label>
+                                <input type="email" asp-for="Contact[index].Email" class="form-control" placeholder="Email Address">
+                                @Html.ValidationMessageFor(model => model.Contact[index].Email, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="col-md-4">
+                                <label>Direct No:</label>
+                                <input type="number" asp-for="Contact[index].DirectNo" class="form-control" placeholder="Direct number">
+                                @Html.ValidationMessageFor(model => model.Contact[index].DirectNo, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="col-md-4">
+                                <label>Mobile:</label>
+                                <input type="number" asp-for="Contact[index].Mobile" class="form-control" placeholder="Mobile number">
+                                @Html.ValidationMessageFor(model => model.Contact[index].Mobile, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="login-page__btn-box d-flex justify-content-flex-end mt-40">
+                        <button type="button" id="creatVendorButton" class="vietjet-btn vietjet-btn--base"><span>Create an account</span></button>
+                    </div>
+                </form>
+            </div>
+            <p class="mt-3 mb-5 text-center">@* Already have an account? <a href="login.html" class="text-interactive-primary">Log in</a> *@</p>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="~/pagescripts/customer/vendor/index.js"></script>
+    <script>
+        var vi = new VendorIndex();
+        vi.init();
+    </script>
+}

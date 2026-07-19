@@ -1,0 +1,107 @@
+﻿@using vHolidays.Models.Settings
+@model List<ContactBranches>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Contact Branches";
+}
+<link href="~/lib/dropzone/cropper.min.css" rel="stylesheet" />
+<link href="~/lib/dropzone/dropzone.css" rel="stylesheet" />
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@ViewData["Title"]</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row" style="margin-top:20px">
+                    <div class="form-group col-md-3 mb-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm" id="Keyword" placeholder="Search by Branch Name" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 mb-2">
+                        <button type="button" id="btn-search" class="btn btn-primary">
+                            <i class="fa-solid fa-magnifying-glass"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="DestinationListContainer">
+
+            @using (Html.BeginForm("Index", "Destination", FormMethod.Post, new { id = "SearchForm" }))
+            {
+                <div class="row" style="padding:inherit">
+                    <div class="col-lg-12">
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <div class="row" style="margin-top:20px">
+                                    <div class="form-group col-md-3 mb-2">
+                                        <button type="button" id="btn-add" class="btn btn-primary">
+                                            <i class="fa-solid fa-plus"></i>  Add
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="invoiceList">
+                                        @await Html.PartialAsync("_partialBranchesList", Model)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    <script src="~/pagescripts/admin/destination/index.js"></script>
+    <script src="~/lib/dropzone/cropper.min.js"></script>
+    <script src="~/lib/dropzone/dropzone.js"></script>
+    <script>
+
+            $('#btn-add').on('click', function () {
+                window.location.href = "/Admin/ContactBranches/Create";
+            })
+                $('#btn-search').on('click', function () {
+            window.location.href = "/Admin/ContactBranches/Index?keyword=" + $('#Keyword').val();
+        })
+            $('.btn-delete').on('click', function () {
+                var Id = $(this).data("id")
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/ContactBranches/SwitchDelete',
+                    dataType: 'JSON',
+                    data: { id: Id },
+                    success: function (content, strStatus) {
+                        if (content.succeeded)
+                            showSuccessMessage(content.message, function () {
+                                location.reload();
+
+                            })
+                        else
+                            showErrorMessage(content.message)
+                    },
+                    error: function (xhr, status, error) {
+                        showErrorMessage("Unable to delete")
+                    }
+                });
+            });
+
+    </script>
+}

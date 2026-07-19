@@ -1,0 +1,23 @@
+﻿@using vHolidays.Models.Package.DataTransferObjects
+@using vHolidays.Utility.Extensions
+@model PackageListModel
+@{
+    ViewData["Title"] = "Packages";
+    var displayText = Model.IsGroupBooking ? "Group Booking" : "Package";
+}
+
+
+<section class="page-header">
+    <div class="page-header__bg page-header__bg-gallery"></div>
+    <div class="container">
+        <h2 class="page-header__title wow animated fadeInLeft animated" data-wow-delay="0s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0s; animation-name: fadeInLeft;">Packages</h2>
+        <div class="page-header__breadcrumb-box">
+            <ul class="vietjet-breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>@displayText</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+@await Html.PartialAsync("_partialPackageList", Model.DatList)

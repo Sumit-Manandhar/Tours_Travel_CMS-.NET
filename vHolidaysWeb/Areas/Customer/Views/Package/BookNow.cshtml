@@ -1,0 +1,330 @@
+﻿@using vHolidays.Models.Package.DataTransferObjects
+@model PackageBookingDTO
+@{
+    ViewData["Title"] = "Book Now";
+    Model.ArrivalDate = DateTime.Now;
+}
+
+
+<section class="page-header pt-40 pb-40">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="page-header__title wow animated fadeInLeft animated animated" data-wow-delay="0s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0s; animation-name: fadeInLeft;">
+                    Book now
+                </h2>
+                <p class="text-white">Customize your trip the way you like it</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="pt-40 pb-40">
+    <div class="container">
+        <div class="row">
+            <form class="step-2s form-container" id="BookNowForm">
+                <div class="title-head">Package Details</div>
+                <div class="box-shadow">
+                    @Html.HiddenFor(a => a.PackageId)
+                    <div class="row">
+
+           
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Departure Date *</label>
+                                @if (Model.IsGroupBooking)
+                                {
+                                    <input type="text" class="form-control initdatepicker" placeholder="Departure Date" asp-for="DepartureDate" disabled>
+
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control initdatepicker" placeholder="Departure Date" asp-for="DepartureDate" >
+
+                                }
+                                @Html.ValidationMessageFor(model => model.DepartureDate, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Arrival Date *</label>
+                                <!-- <input type="text" class="form-control" placeholder="Preffered Travel Date."> -->
+                                <input type="text" asp-for="ArrivalDate" placeholder="Select date" id="datepicker" class="form-control tour-listing-details__sidebar-form-date vietjet-datepicker initdatepicker">
+                                <i class="tour-listing-details__sidebar-form-date-arrow fas fa-angle-down"></i>
+                                @Html.ValidationMessageFor(model => model.ArrivalDate, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Destination *</label>
+                                @Html.DropDownListFor(model => model.Destination, new SelectList(Model.Countries, "CountryName", "CountryName"), new { @class = "form-select mr-sm-2" })
+                                @Html.ValidationMessageFor(model => model.Destination, "", new { @class = "text-danger" })
+
+         
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label>No. of Adult</label>
+                                        <select class="form-select mr-sm-2" asp-for="NumberOfAdults">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+
+                                        </select>
+                                        @Html.ValidationMessageFor(model => model.NumberOfAdults, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label>No. of Children</label>
+                                        <select class="form-select mr-sm-2" asp-for="NumberOfChildren">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+
+                                        </select>
+                                        @Html.ValidationMessageFor(model => model.NumberOfChildren, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-head">Food Preferences</div>
+                <div class="box-shadow">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="checkout-page__check-box">
+                                <input type="checkbox" asp-for="Vegetarian" id="Vegetarian">
+                                <label for="Vegetarian">Vegetarian<span></span></label>          
+                                @Html.ValidationMessageFor(model => model.Vegetarian, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-page__check-box">
+                                <input type="checkbox" asp-for="NonVegetarian" id="non-Vegetarian">
+                                <label for="non-Vegetarian">Non-Vegetarian<span></span></label>                    
+                                @Html.ValidationMessageFor(model => model.NonVegetarian, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="">
+                                <label>Special Request *</label>
+                                <textarea type="textarea" asp-for="SpecialRequest" class="form-control" placeholder=""></textarea>   
+                                @Html.ValidationMessageFor(model => model.SpecialRequest, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-head">Personal Details</div>
+                <div class="box-shadow">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="">
+                                <label>Salutations *</label>
+                                <select asp-for="Salutation" id="" class="form-select mr-sm-2">
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Mrs.">Mrs.</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.Salutation, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="">
+                                <label>First Name *</label>
+                                <input type="text" class="form-control" placeholder="First Name" asp-for="FirstName">
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="">
+                                <label>Last Name *</label>
+                                <input type="text" class="form-control" placeholder="Last name" asp-for="LastName">
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Nationality *</label>
+                                @Html.DropDownListFor(model => model.Nationality, new SelectList(Model.Countries, "CountryName", "CountryName"), new { @class = "form-select mr-sm-2" })
+                                @Html.ValidationMessageFor(model => model.Nationality, "", new { @class = "text-danger" })
+
+                         
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Address *</label>
+                                <input type="text" class="form-control" placeholder="Address" asp-for="Address">
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Contact Number</label>
+                                <input type="text" class="form-control" placeholder="Contact Number" asp-for="ContactNumber">
+                                @Html.ValidationMessageFor(model => model.ContactNumber, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Email Address *</label>
+                                <input type="text" class="form-control" placeholder="Email Address" asp-for="EmailAddress">
+                                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Select Document Type *</label>
+                                <select class="form-select mr-sm-2" asp-for="DocumentType">
+                                    <option value="AF">Passport</option>
+                                    <option value="AX">Citizenship</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.DocumentType, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-head">Emergency Details</div>
+                <div class="box-shadow">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="">
+                                <label>Salutations *</label>
+                                <select asp-for="EmergencySalutation" id="" class="form-select mr-sm-2">
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Mrs.">Mrs.</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.EmergencySalutation, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="">
+                                <label>First Name *</label>
+                                <input type="text" class="form-control" placeholder="Emergency First Name" asp-for="EmergencyFirstName">
+                                @Html.ValidationMessageFor(model => model.EmergencyFirstName, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="">
+                                <label>Last Name *</label>
+                                <input type="text" class="form-control" placeholder="Emergency Last Name" asp-for="EmergencyLastName">
+                                @Html.ValidationMessageFor(model => model.EmergencyLastName, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Nationality *</label>
+                                @Html.DropDownListFor(model => model.EmergencyNationality, new SelectList(Model.Countries, "CountryName", "CountryName"), new { @class = "form-select mr-sm-2" })
+
+                                @Html.ValidationMessageFor(model => model.EmergencyNationality, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Address *</label>
+                                <input type="text" class="form-control" placeholder="Address" asp-for="EmergencyAddress">
+                                @Html.ValidationMessageFor(model => model.EmergencyAddress, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Contact Number</label>
+                                <input type="text" class="form-control" placeholder="Contact Number" asp-for="EmergencyContactNumber">
+                                @Html.ValidationMessageFor(model => model.EmergencyContactNumber, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Email Address *</label>
+                                <input type="text" class="form-control" placeholder="Email Address" asp-for="EmergencyEmailAddress">
+                                @Html.ValidationMessageFor(model => model.EmergencyEmailAddress, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label>Relation *</label>
+                                <input type="text" class="form-control" placeholder="Relation" asp-for="EmergencyRelation">
+                                @Html.ValidationMessageFor(model => model.EmergencyRelation, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-head">Do you need flight?</div>
+                <div class="box-shadow">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="">
+                                <select asp-for="NeedFlight" id="" class="form-select mr-sm-2">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.NeedFlight, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Click here to indicate that you have read and agree to the  <a href="@Url.Action("TermsNCond","Package",new {area="Customer"})">Terms and Conditions.</a></p>
+
+                <div class="login-page__btn-box d-flex justify-content-flex-start column-gap-10 mt-40">
+
+                    <button type="submit" class="vietjet-btn vietjet-btn--base"><span>Book now</span></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+
+    <script src="~/pagescripts/customer/booking.js"></script>
+    <script>
+        var cd = new Booking();
+        cd.init();
+
+    </script>
+}

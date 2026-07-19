@@ -1,0 +1,68 @@
+﻿@model DestinationDetailsModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<section class="page-header">
+    <div class="page-header__bg page-header__vietnam" style=" background-image:url(@("../../")) !important"></div>
+    <div class="container">
+        <h2 class="page-header__title wow animated fadeInLeft animated" data-wow-delay="0s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0s; animation-name: fadeInLeft;">@Model.Name</h2>
+        @Model.CountryName
+    </div>
+    <img src="@("../../"+Model.Images.FirstOrDefault(a=>a.IsBanner)?.ImageUrl)" class="d-block w-100" alt="...">
+
+</section>
+<section>
+    
+    <div class="card">
+        <div class="card-body">
+            <br />
+            <hr />
+            <img src="@("../../"+Model.Images.FirstOrDefault(a=>a.IsPrimary)?.ImageUrl)" class="d-block w-25 h-25" alt="...">
+
+            @Html.Raw(Model.ShortDescription)
+            <br /> 
+            <hr />
+            <h6>Description</h6>
+            @Html.Raw(Model.Description)
+            <br />
+            <hr />
+            <h6>Overview</h6>
+            @Html.Raw(Model.Overview)
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Carousel with fade transition</h5>
+            @{
+                int count = 0;
+            }
+            <!-- Slides with fade transition -->
+            <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var img in Model.Images.Where(a=>!a.IsPrimary && !a.IsBanner))
+                    {
+                        <div class="carousel-item @(count==0?"active":"" )">
+                            <img src="@("../../"+img.ImageUrl)" class="d-block w-100" alt="...">
+                        </div>
+                    }
+
+                    
+                    
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
+            </div><!-- End Slides with fade transition -->
+
+        </div>
+    </div>
+
+</section>

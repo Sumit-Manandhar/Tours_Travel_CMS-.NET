@@ -1,0 +1,163 @@
+﻿@using vHolidays.Models.Package.DatabaseModel
+@using vHolidays.Utility.Enumerations
+@model List<PackageInclusions>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var packageDetailId = (int)ViewData["PackageDetailId"];
+    ViewData["Title"] = "Inclusions";
+    var includes = Model?.Where(a => a.IsIncluded);
+    var excudes = Model?.Where(a => !a.IsIncluded);
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+@section Styles {
+    <style>
+        label.error {
+            color: red;
+        }
+    </style>
+}
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@displayText</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index",controller,new {Area="Admin"})">@displayText</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+                <input type="hidden" id="packageDetailId" value="@packageDetailId" />
+                @await Html.PartialAsync("~/Areas/Admin/Views/Package/_partialTabList.cshtml", (int)PackageTabMenu.Inclusion)
+
+                <div class="row">
+                    <div class="tab-content pt-2" id="inclusionTabContents">
+                        <div class="tab-pane fade active show" id="Inclusion" role="tabpanel" aria-labelledby="Inclusion-tab">
+                            @using (Html.BeginForm("Index", controller, FormMethod.Post, new { id = "SearchForm" }))
+                            {
+                                <div class="row" style="padding:inherit">
+                                    <div class="col-lg-12">
+
+                                        <div class="row" style="margin-top:20px">
+                                            <div class="form-group col-md-3 mb-2">
+                                                <button type="button" id="btn-add" class="btn btn-primary">
+                                                    <i class="fa-solid fa-pencil"></i>  Add Inclusions
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="dataList">
+
+                                            <div class="col-lg-12">
+
+                                                <div class="row">
+                                                    @if (includes is not null && includes.Count() > 0)
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <div class="table-responsive" style="margin-top:20px">
+                                                                <h4>
+                                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                                    Includes
+                                                                </h4>
+                                                                <table class="table customize-table table-bordered mb-0 v-middle">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th>
+                                                                                id
+                                                                            </th>
+                                                                            <th>
+                                                                                Name
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+
+                                                                        @foreach (var item in includes)
+                                                                        {
+                                                                            <tr>
+
+                                                                                <td>@item.Id </td>
+                                                                                <td>@item.Name </td>
+                                                                            </tr>
+                                                                        }
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    @if (excudes is not null && excudes.Count() > 0)
+                                                    {
+
+                                                        <div class="col-md-12">
+                                                            <div class="table-responsive" style="margin-top:20px">
+                                                                <h4>
+                                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                                    Excludes
+                                                                </h4>
+                                                                <table class="table customize-table table-bordered mb-0 v-middle">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th>
+                                                                                id
+                                                                            </th>
+                                                                            <th>
+                                                                                Name
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @foreach (var item in excudes)
+                                                                        {
+                                                                            <tr>
+
+                                                                                <td>@item.Id </td>
+                                                                                <td>@item.Name </td>
+
+                                                                            </tr>
+                                                                        }
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    @section Scripts {
+        <script src="~/pagescripts/admin/package/packageinclusion.js"></script>
+        <script src="~/js/tableform.js"></script>
+        <script>
+
+            var pi = new PackageInclusion();
+            pi.init();
+        </script>
+    }

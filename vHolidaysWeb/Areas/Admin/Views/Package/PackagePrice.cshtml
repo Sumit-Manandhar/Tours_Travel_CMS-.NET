@@ -1,0 +1,163 @@
+﻿@using vHolidays.Models.Package.DataTransferObjects
+@using vHolidays.Utility.Enumerations
+@model PriceViewModel
+@{
+    ViewData["Title"] = "Package Price";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var packageDetailId = (int)ViewData["PackageDetailId"];
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@displayText</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index",controller,new {Area="Admin"})">@displayText</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+                <input type="hidden" id="packageDetailId" value="@packageDetailId" />
+                @await Html.PartialAsync("~/Areas/Admin/Views/Package/_partialTabList.cshtml", (int)PackageTabMenu.Price)
+
+                <div class="row">
+                    <div class="tab-content pt-2" id="PriceTabContents">
+                        <div class="tab-pane fade active show" id="Price" role="tabpanel" aria-labelledby="Price-tab">
+                            @using (Html.BeginForm("Price", controller, FormMethod.Post, new { id = "packagePriceForm" }))
+                            {
+                                <div class="row" style="padding:inherit">
+                                    <div class="col-lg-12">
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive" style="margin-top:20px">
+                                                    <table class="table customize-table table-bordered mb-0 v-middle">
+                                                        @if (Model.PriceList != null && Model.PriceList.Any())
+                                                        {
+                                                            <thead class="table-light">
+                                                                <tr>
+                                                                    <th>
+                                                                        Group Size
+                                                                    </th>
+                                                                    @foreach (var group in Model.GroupList.OrderBy(x => x.Order))
+                                                                    {
+                                                                        <th>
+                                                                            @group.Name
+                                                                        </th>
+                                                                    }
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var cls in Model.ClassOption)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            @cls.Name
+                                                                        </td>
+                                                                        @foreach (var group in Model.GroupList.OrderBy(x => x.Order))
+                                                                        {
+                                                                            var dataIndex = Model.PriceList.FindIndex(x => x.PackageGroupId == group.Id && x.PackageClassOptionId == cls.Id);
+                                                                            <td>
+                                                                                @Html.HiddenFor(model => model.PriceList[dataIndex].Id)
+                                                                                @Html.HiddenFor(model => model.PriceList[dataIndex].PackageDetailId)
+                                                                                @Html.HiddenFor(model => model.PriceList[dataIndex].PackageClassOptionId)
+                                                                                @Html.HiddenFor(model => model.PriceList[dataIndex].PackageGroupId)
+                                                                                @Html.TextBoxFor(model => model.PriceList[dataIndex].Price, new { type = "number" })
+                                                                            </td>
+                                                                        }
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        }
+                                                        else
+                                                        {
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        @if (Model.GroupList is null || !Model.GroupList.Any())
+                                                                        {
+                                                                            <p>Please add @Html.ActionLink("group", "PackageGroup", "Package", new { area = "Admin", Id = packageDetailId }) before adding price </p>
+                                                                        }
+                                                                        @if (Model.ClassOption is null || !Model.ClassOption.Any())
+                                                                        {
+                                                                            <p>Please select @Html.ActionLink("class type", "Edit", "Package", new { area = "Admin", Id = packageDetailId }) before adding price </p>
+                                                                        }
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 text-end">
+                                                <button type="button" class="btn btn-primary" id="submitPriceButton">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#submitPriceButton").on("click", function (e) {
+                e.preventDefault();
+                if ($("#packagePriceForm").valid()) {
+                    showConfirmation("Warning", "Are you sure to save the price?", function () {
+                        var formData = new FormData();
+                        var form = $("#packagePriceForm");
+                        var serializeForm = form.serializeArray()
+                        $.each(serializeForm, function (index, field) {
+                            formData.append(field.name, field.value);
+                        });
+                        $.ajax({
+                            url: '/Admin/Package/AddUpdatePrice',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.succeeded)
+                                    showSuccessMessage(response.message, function () {
+                                        window.location.reload();
+                                    })
+                                else
+                                    showErrorMessage(response.message)
+                            },
+                            error: function (xhr, status, error) {
+                                showErrorMessage(error)
+                            }
+                        });
+                    });
+                }
+            });
+        })
+    </script>
+}

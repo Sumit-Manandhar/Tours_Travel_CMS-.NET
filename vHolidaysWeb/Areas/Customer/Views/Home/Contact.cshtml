@@ -1,0 +1,271 @@
+﻿@using Microsoft.AspNetCore.Http
+@using vHolidays.DataAccess.Repository.IRepository
+@using vHolidays.Models.Settings
+@model List<ContactBranches>
+
+@inject IUnitOfWork _uow
+@{
+    var baseURl = ViewBag?.BaseUrl ?? "";
+    var test = Model;
+    var contact = _uow.Contacts.GetAll().FirstOrDefault(a => a.IsActive && a.IsPublished && !a.IsDeleted);
+    ViewData["Title"] = "Contact";
+
+}
+
+
+
+<section class="page-header">
+    <div class="page-header__bg page-header__bg-contact"></div>
+    <div class="container">
+        <div class="contact-page__info-row row">
+            <div class="col-lg-3 wow animated fadeInUp animated" data-wow-delay="0s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0s; animation-name: fadeInUp;">
+                <div class="contact-page__info-box">
+                    <div class="contact-page__info-icon-box">
+                        <span class="fa-brands fa-whatsapp"></span>
+                    </div>
+                    <div class="contact-page__info-text-box">
+                        <p class="contact-page__info-title text-gray">Have any question?</p>
+                        <a href="tel:23(000)-8050">
+                            <h4 class="contact-page__info-text contact-page__info-text-link">
+                                @contact?.ContactNumber
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 wow animated fadeInUp animated" data-wow-delay="0.3s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0.3s; animation-name: fadeInUp;">
+                <div class="contact-page__info-box">
+                    <div class="contact-page__info-icon-box">
+                        <span class="fa-regular fa-envelope"></span>
+                    </div>
+                    <div class="contact-page__info-text-box">
+                        <p class="contact-page__info-title text-gray">Send Email</p>
+                        <a href="mailto:enquiry@vietjetholidays.com">
+                            <h4 class="contact-page__info-text contact-page__info-text-link">
+                                @contact?.ContactEmail
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 wow animated fadeInUp animated" data-wow-delay="0.6s" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0.6s; animation-name: fadeInUp;">
+                <div class="contact-page__info-box contact-page__info-box--three">
+                    <div class="contact-page__info-icon-box">
+                        <span class="icon-location-1"></span>
+                    </div>
+                    <div class="contact-page__info-text-box">
+                        <p class="contact-page__info-title text-gray">Visit us at</p>
+                        <h4 class="contact-page__info-text">
+                            @contact?.ContactAddress
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model is not null && Model.Count > 0)
+{
+
+
+    <section class="testimonial-one testimonial-one--home contact-branch" style="background-image: url(assets/images/branch/map.jpg);">
+
+        <div class="container">
+            <div class="sec-title text-center">
+                <p class="sec-title__tagline">Reach out to us in any of our branches!</p>
+                <h2 class="sec-title__title">Contact Us</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="testimonial-one__carousel vietjet-owl__carousel vietjet-owl__carousel--basic-nav vietjet-owl__carousel--with-shadow owl-theme owl-carousel" data-owl-options='{
+                 "items" : 2,
+                 "margin" : 42,
+                 "smartSpeed" : 700,
+                 "loop" :false,
+                 "autoplay" : 6000,
+                 "nav" :false,
+                 "dots" :true,
+                 "navText" : ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
+                            "responsive":{
+                                "0":{
+                                    "items": 1
+                                },
+                                "768":{
+                                    "items": 2
+                                },
+                                "1200":{
+                                    "items": 2,
+                                    "dots": false
+                                }
+                            }
+                            }'>
+
+                @foreach (var branch in Model)
+                {
+
+                    var imgurl = "";
+                    if (string.IsNullOrEmpty(branch.CompanyImage))
+                    {
+                        imgurl = $"{baseURl}/images/branch/xuan.jpg";
+
+                    }
+                    else
+                    {
+                        imgurl = $"{baseURl}/{branch.CompanyImage}";
+                    }
+                                                                     <div class="item">
+                                                                        <div class="testimonials-card">
+                                                                                <div class="testimonials-card__image">
+                                @*                                                         <img src="~/images/branch/xuan.jpg" alt="Jacob s"/>
+ *@                                                        <img src="@imgurl" alt="Jacob s"/>
+                                @*                                                 <img src="~/assets/images/branch/gm-holidays.webp" >
+ *@                                            </div>
+                                                                            <div class="testimonials-card__meta">
+                                                                                    <h2 class="testimonials-card__meta__name branch-name">@branch.BranchName </h2>
+                                                                                        <p class="testimonials-card__meta__designation">@branch.BranchType (@branch.BranchCountry) </p>
+                                                                            </div>
+
+                                                                            <div class="testimonials-card__quote">
+                                                                                <ul class="footer-widget__info">
+                                                                                    <li>
+                                                                                        <i class="fa fa-envelope"></i>
+                                                                                        <a href="@("mailto:"+ branch.Email)">@branch.Email
+                                                                                        </a>
+                                                                                    </li>
+                                                                                    <li>
+
+                                                                                        <i class="fa-solid fa-phone"></i><span>
+                                                                                            <a href="@("tel:"+ branch.ContactNumber)" target="_blank">@branch.ContactNumber </a>
+                                                                                             </span>
+                                                                                    </li>
+
+                                                                                    <li>
+
+                                                                                        <i class="fa-solid fa-location-dot"></i>
+                                                                                            <span>@branch.Address
+                                                                                                </span>
+                                                                                        </li>
+                                                                                </ul>
+
+                                @foreach (var agent in branch.BranchAgents.Where(a => a.IsActive && a.IsPublished && !a.IsDeleted))
+                                {
+                                                                                                        <div class="agent-block">
+                                                                                                            <h3 class="agent-name">@agent.AgentName</h3>
+                                                                                                            <ul class="footer-widget__info">
+
+
+                                                                                                                <li>Licence No. @agent.LiscenceNo</li>
+                                                                                                                <li>
+                                                                                                                    Email:  <a href="@("mailto:"+ agent.Email)">@agent.Email</a>
+                                                                                                                 </li>
+                                                                                                                <li>
+                                                                                                                    Address: @agent.Address
+
+                                                                                                                </li>
+                                                                                                            </ul>
+                                                                                                          </div>
+                                }
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                }
+
+                                </div>
+        </div>
+    </section>
+}
+<section class="contact-page section-space-top">
+    <div class="container">
+        <div class="sec-title text-center">
+
+            <p class="sec-title__tagline">Contact Us</p><!-- /.sec-title__tagline -->
+
+            <h2 class="sec-title__title">Feel free to write us anytime</h2><!-- /.sec-title__title -->
+        </div>
+
+        <form action="SendMessage" class="contact-page__form form-one row gutter-20 contact-form-validated" id="contactForm">
+            <div class="col-md-6 wow animated fadeInUp" data-wow-delay="0s" data-wow-duration="1500ms">
+                <div class="form-one__group">
+                    <input type="text" name="SenderName" id="form-one-name-input" placeholder="Your Name" class="form-one__input">
+                </div>
+            </div>
+            <div class="col-md-6 wow animated fadeInUp" data-wow-delay="0.3s" data-wow-duration="1500ms">
+                <div class="form-one__group">
+                    <input type="email" name="SenderEmail" id="form-one-email-input" placeholder="Email Address" class="form-one__input">
+                </div>
+            </div>
+            <div class="col-md-6 wow animated fadeInUp" data-wow-delay="0s" data-wow-duration="1500ms">
+                <div class="form-one__group">
+                    <input type="tel" name="SenderPhoneNumber" id="form-one-phone-input" placeholder="Phone" class="form-one__input">
+                </div>
+            </div>
+            <div class="col-md-6 wow animated fadeInUp" data-wow-delay="0.3s" data-wow-duration="1500ms">
+                <div class="form-one__group">
+                    <input type="text" name="Subject" id="form-one-subject-input" placeholder="Subject" class="form-one__input">
+                </div>
+            </div>
+            <div class="col-12 wow animated fadeInUp" data-wow-delay="0.1s" data-wow-duration="1500ms">
+                <div class="form-one__group">
+                    <textarea name="Message" id="form-one-message-input" cols="30" rows="10" placeholder="Write a Message" class="form-one__message form-one__input"></textarea>
+                </div>
+            </div>
+            <div class="col-12 wow animated fadeInUp" data-wow-delay="0.2s" data-wow-duration="1500ms">
+                <div class="form-one__btn-box">
+                    <button type="submit" class="form-one__btn vietjet-btn vietjet-btn--base">
+                        <span>
+                            Send
+                            Message
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="result"></div>
+    </div>
+    <div class="google-map google-map__@@extraClassName mt-120">
+        <iframe title="template google map" src="@contact?.MapLinks" class="map__@@extraClassName" allowfullscreen></iframe>
+    </div>
+    <!-- /.google-map -->
+</section>
+
+
+@section Scripts {
+    <script>
+        $('#contactForm').on("submit", function (e) {
+            e.preventDefault();
+            var formData = new FormData();
+            var form = $("#contactForm");
+            var serializeForm = form.serializeArray()
+            // Append form data
+            $.each(serializeForm, function (index, field) {
+                formData.append(field.name, field.value);
+            });
+            $.ajax({
+                url: '/Customer/Home/SendMessage',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.succeeded)
+                        showSuccessMessage(response.message, function () {
+                            $('#contactForm').find('input').val('');
+                            $('#contactForm').find('textarea').val('');
+                        })
+                    else
+                        showErrorMessage(response.message)
+
+                },
+                error: function (xhr, status, error) {
+                    showErrorMessage(error)
+
+                }
+            });
+        })
+
+
+    </script>
+}

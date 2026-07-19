@@ -1,0 +1,107 @@
+﻿@model DestinationViewModel
+@{
+    Layout = null;
+    var data = Model.Data;
+    var isActive = data.IsActive ? "checked" : "";
+    var isPublished = data.IsPublished ? "checked" : "";
+    var isDeleted = data.IsDeleted ? "checked" : "";
+}
+
+
+<div class="modal fade" id="modal-addUpdate" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add/Update destination</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddUpdate" asp-controller="Destination" method="post" class="row" id="saveDestinationfrm">
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" name="Id" value="@data?.Id">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-2 col-form-label">Destination</label>
+
+                            <input type="text" class="form-control" name="DestinationName" placeholder="Destination Name" value="@data?.Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-2 col-form-label">Country</label>
+
+                            <select id="CountryId" name="CountryId" class="form-control select2" style="width: 100%;">
+                                @foreach (var c in Model.Countries)
+                                {
+                                    <option value="@c.Id" > @c.CountryName </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">Short Description</label>
+
+                            <input type="text" name="ShortDesc" class="form-control" placeholder="Short Description" value="@data?.ShortDescription">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">Description</label>
+
+                            <textarea class="form-control" id="Description" name="Description" placeholder=" Description">@(data?.Description)</textarea>
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-check">
+                                <input class="form-check-input @isActive" type="checkbox" id="chk-IsActive" name="chk-IsActive">
+                                <input type="hidden" id="IsActive" name="IsActive" value="@data?.IsActive">
+                                <label class="form-check-label" for="chk-IsActive">
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-check">
+                                <input class="form-check-input @isPublished" type="checkbox" id="chk-IsPublished" name="chk-IsPublished">
+                                <input type="hidden" id="IsPublished" name="IsPublished" value="@data?.IsPublished">
+                                <label class="form-check-label" for="chk-IsPublished">
+                                    Published
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-check">
+                                <input class="form-check-input @isDeleted" type="checkbox" id="chk-IsDeleted" name="chk-IsDeleted">
+                                <input  type="hidden" id="IsDeleted" name="IsDeleted" value="@data?.IsDeleted">
+                                <label class="form-check-label" for="chk-IsDeleted">
+                                    Deleted
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">Overview</label>
+                            <textarea class="form-control" id="Overview" name="Overview" placeholder="Overview"> @(data?.Overview) </textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-6 col-form-label">Display Image</label>
+                            <input class="form-control" type="file" name="DisplayImg" id="DisplayImg">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-6 col-form-label">Banner Image</label>
+                            <input class="form-control" type="file" name="BannerImg" id="BannerImg">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-6 col-form-label">Additional Images</label>
+
+                            <div id="imageUploadContainer" class="dropzone">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="submit-dest">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

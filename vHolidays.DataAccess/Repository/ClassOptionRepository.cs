@@ -1,0 +1,88 @@
+﻿using vHolidays.DataAccess.Repository.IRepository;
+using vHolidays.DataAcess.Data;
+using vHolidays.Models.Common;
+using vHolidays.Models.Master.DatabaseModel;
+using vHolidays.Models.Master.DataTransferObjects;
+
+namespace vHolidays.DataAccess.Repository
+{
+    public class ClassOptionRepository : Repository<ClassOption>, IClassOptionrepository
+    {
+        private readonly ApplicationDbContext _db;
+        public ClassOptionRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task<ResponseModel<int>> CreateUpdate(ClassOptionDto model)
+        {
+            try
+            {
+                ClassOption data = new()
+                {
+                    Id = model.Id,
+                    Description = model.Description,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    IsPublished = model.IsPublished,
+                    IsDeleted = false,
+                };
+                if (model.Id > 0)
+                {
+                    Update(data);
+                }
+                else
+                {
+
+                    await _db.AddAsync(data);
+                }
+
+                await _db.SaveChangesAsync();
+                return new ResponseModel<int>
+                {
+                    Data = data.Id,
+                    Succeeded = true,
+                    Message = "Class Saved",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel<int>
+                {
+                    Succeeded = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+
+        public async Task<ResponseModel<object>> OnOffDelete(int id)
+        {
+            try
+            {
+                var obj = _db.ClassOptions.FirstOrDefault(a => a.Id == id);
+                if (obj is null)
+                    return new ResponseModel<object>
+                    {
+                        Succeeded = false,
+                        Message = "Entity not found",
+                    };
+                obj.IsDeleted = !obj.IsDeleted;
+                _db.Update(obj);
+                await _db.SaveChangesAsync();
+                return new ResponseModel<object>
+                {
+                    Succeeded = true,
+                    Message = "Class Saved",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel<object>
+                {
+                    Succeeded = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+    }
+}
