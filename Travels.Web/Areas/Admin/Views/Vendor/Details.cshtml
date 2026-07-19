@@ -1,0 +1,157 @@
+﻿@using Travels.Models.SupplyPartner.DataTransferObjects
+@model SupplierDetailDto
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">Vendor detail</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"> <a href="/Admin/Vendor">Vendor</a> </li>
+            <li class="breadcrumb-item active"> Detail</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-2">
+            <div class="container mt-4">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Detail</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Id</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Id)</dd>
+                                    <dt class="col-sm-5">Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Name)</dd>
+                                    <dt class="col-sm-5">Address1</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Address1)</dd>
+                                    <dt class="col-sm-5">Address2</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Address2)</dd>
+                                    <dt class="col-sm-5">Country</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Country)</dd>
+                                    <dt class="col-sm-5">State</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.State)</dd>
+                                    <dt class="col-sm-5">City</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.City)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5 pt-3">Zip</dt>
+                                    <dd class="col-sm-7 pt-3">@Html.DisplayFor(model => model.Zip)</dd>
+                                    <dt class="col-sm-5">Currency</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Currency)</dd>
+                                    <dt class="col-sm-5">Updated Tel</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.UpdatedTel)</dd>
+                                    <dt class="col-sm-5">Updated Fax</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.UpdatedFax)</dd>
+                                    <dt class="col-sm-5">Website</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Website)</dd>
+                                    <dt class="col-sm-5">Central Email</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.CentralEmail)</dd>
+                                    <dt class="col-sm-5">Reservation Email1</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ReservationEmail1)</dd>
+                                    <dt class="col-sm-5">Reservation Email2</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ReservationEmail2)</dd>
+                                    <dt class="col-sm-5">License</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.License)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Destination</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Country</th>
+                                            <th>Cities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var city in Model.Destination)
+                                        {
+                                            <tr>
+                                                <td>@city.Country</td>
+                                                <td>@string.Join(",", city.City.Select(item => item.City))</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Product</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Product:</dt>
+                                    <dd class="col-sm-7">@string.Join(",", Model.Product.Select(item => item.SupplierName))</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @foreach (var cont in Model.Contact)
+                    {
+                        <div class="col-md-6 mb-3">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>@cont.Type.ToString()</h5>
+                                </div>
+                                <div class="card-body">
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Name</dt>
+                                        <dd class="col-sm-7">@cont.Name</dd>
+                                        <dt class="col-sm-5">Designation</dt>
+                                        <dd class="col-sm-7">@cont.Designation</dd>
+                                        <dt class="col-sm-5">Email</dt>
+                                        <dd class="col-sm-7">@cont.Email</dd>
+                                        <dt class="col-sm-5">DirectNo</dt>
+                                        <dd class="col-sm-7">@cont.DirectNo</dd>
+                                        <dt class="col-sm-5">Mobile</dt>
+                                        <dd class="col-sm-7">@cont.Mobile</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

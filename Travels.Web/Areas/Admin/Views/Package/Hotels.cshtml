@@ -1,0 +1,190 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@using Travels.Utility.Enumerations
+@model PackageHotelViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Package Hotels";
+    var PackageDetailId = (int)ViewData["PackageDetailId"];
+    var addedHotels = Model.Hotels.Where(a => Model.Data.Select(a => a.HotelId).ToList().Contains(a.Id)).ToList();
+    var additionalHotel = Model.Hotels.Where(a => !addedHotels.Select(c => c.Id).Contains(a.Id));
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@displayText</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index",controller,new {Area="Admin"})">@displayText</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+
+                @await Html.PartialAsync("~/Areas/Admin/Views/Package/_partialTabList.cshtml", (int)PackageTabMenu.Hotel)
+
+                <div class="row">
+                    <div class="tab-content pt-2" id="packageTabContents">
+                        <div class="tab-pane fade active show" id="Detail" role="tabpanel" aria-labelledby="Detail-tab">
+
+                            <form asp-action="Create" asp-controller=@controller method="post" id="updateHotelForm">
+                                <input type="hidden" id="PackageDetailId" value="@PackageDetailId" />
+                                @if (Model.Data != null && Model.Data.Any())
+                                {
+                                    <div class="row">
+
+                                        <div class="table-responsive" style="margin-top:20px">
+                                            <h4>
+                                                <i class="fa fa-hotel" aria-hidden="true"></i>
+                                                Included
+                                            </h4>
+                                            <table class="table customize-table table-bordered mb-0 v-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>
+                                                            Id
+                                                        </th>
+                                                        <th>
+                                                            Name
+                                                        </th>
+                                                        <td>Actions</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach (var item in addedHotels)
+                                                    {
+                                                        <tr>
+
+                                                            <td>@item.Id </td>
+                                                            <td>@item.HotelName </td>
+                                                            <td>
+                                                                <a href="#" class="link" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa-solid fa-ellipsis"></i>
+                                                                </a>
+                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                                                    <li>
+                                                                        <a class="dropdown-item btn-delete" href="javascript:void(0)" data-id="@item.Id">
+                                                                            <i class="fa-solid fa-trash"></i>
+                                                                            Delete
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <label for="inputText" class="col-sm-8 col-form-label">Select existing hotels</label>
+                                        @Html.ListBoxFor(model => model.HotelId, new SelectList(additionalHotel, "Id", "HotelName"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.HotelId, "", new { @class = "text-danger" })
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputText" class="col-sm-8 col-form-label"><br /> </label>
+
+                                        <button type="button" class="btn btn-primary" id="addExtraHotel">
+                                            <i class="fa fa-plus-square" aria-hidden="true"></i> Add hotel
+                                        </button>
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(a => a.PackageId)
+                                <div class="pt-3">
+                                    <button type="submit" class="btn btn-primary" id="submitEditForm">Save</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#HotelId').select2();
+
+            $('.btn-delete').on('click', function () {
+                var Id = $(this).data("id")
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/Package/DeleteHotel',
+                    dataType: 'JSON',
+                    data: { id: Id, packageId: $('#PackageId').val() },
+                    success: function (response, strStatus) {
+                        if (response.succeeded)
+                            showSuccessMessage(response.message, function () {
+                                location.reload();
+                            })
+                        else
+                            showErrorMessage(response.message)
+                    },
+                    error: function (xhr, status, error) {
+                        showErrorMessage(error)
+                    }
+                });
+            });
+            $("#updateHotelForm").on("submit", function (e) {
+                e.preventDefault();
+                if ($("#updateHotelForm").valid()) {
+                    var formData = new FormData();
+                    var form = $("#updateHotelForm");
+                    var serializeForm = form.serializeArray()
+                    // Append form data
+                    $.each(serializeForm, function (index, field) {
+                        formData.append(field.name, field.value);
+                    });
+                    $.ajax({
+                        url: '/Admin/Package/EditHotel',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.succeeded)
+                                showSuccessMessage(response.message, function () {
+
+                                    window.location.reload();
+                                })
+                            else
+                                showErrorMessage(response.message)
+
+                        },
+                        error: function (xhr, status, error) {
+                            showErrorMessage(error)
+
+                        }
+                    });
+                }
+            });
+
+            $('#addExtraHotel').on('click', function () {
+                window.location.href = '/admin/Hotel/Create?id=0&countryId=' + @Model.CountryId +'&packageId=' + @Model.PackageId+'&redirectUrl=/admin/@controller/Hotels/' + @Model.PackageId
+                     })
+        })
+    </script>
+}

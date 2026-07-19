@@ -1,0 +1,103 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model List<InclusionAddUpdateModel>
+@{
+    Layout = null;
+    var packageDetailId = (int)ViewData["PackageDetailId"];
+}
+
+
+<div class="modal fade" id="addUpdateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add/Update Inclusion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="AddUpdateInclusion" asp-controller="Package" method="post" class="row" id="saveInclusionForm">
+         
+                    <input class="form-check-input" value="@packageDetailId" type="hidden" name="PackageDetailId">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style="margin-top:20px">
+                            <table class="table customize-table table-bordered mb-0 v-middle" id="tblItti">
+                                <thead class="table-light">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>Type</td>
+                                        @*  <td>State</td> *@
+                                        <td>Action</td>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    @if (Model.Count > 0)
+                                    {
+                                        var ct = 0;
+                                        @foreach (var i in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="hidden" name="Inclusions[@ct].Id" value="@i.Id" />
+                                                    <input type="text" name="Inclusions[@ct].Name" id="Flights[@ct].Name" class="form-control" Value="@(i.Name)" placeholder="Origin" required />
+                                                </td>
+                                                
+                                                <td>
+                                                    <select name="Inclusions[@ct].IsIncluded" class="form-control">
+                                                        <option value="True" selected="@i.IsIncluded"> Includes </option>
+                                                        <option value="False" selected="@(!i.IsIncluded)"> Excludes </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm" data-action="delete-row">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td>
+
+                                            </tr>
+                                            ct++;
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <input type="text" name="AC.Name" id="AC.Name" class="form-control" placeholder="Name" required />
+                                        </td>
+
+                                        <td>
+                                            <select name="AC.IsIncluded" class="form-control ">
+                                                <option value="True"> Includes </option>
+                                                <option value="False"> Excludes </option>
+                                            </select>
+                                        </td>
+                                        
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" data-action="add-row">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-action="delete-row" style="display:none;">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                   
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addUpdateInclusion">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

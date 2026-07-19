@@ -1,0 +1,172 @@
+﻿@using Travels.Models.Master.DatabaseModel;
+@using Travels.Utility.Enumerations
+@model List<ClassOption>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Class Option";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">Master Data</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item active">Class Option</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+<br />
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-2">
+
+            <div id="DataListContainer">
+
+                @using (Html.BeginForm("ClassOption", "MasterData", FormMethod.Post, new { id = "SearchForm" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    @await Html.PartialAsync("_partialTabList", (int)MasterDataTabMenu.ClassOption)
+                                    <div class="row">
+                                        <div class="tab-content pt-2" id="mdataTabContent">
+                                            <div class="tab-pane fade active show" id="ClassOptionTab" role="tabpanel" aria-labelledby="ClassOption-tab">
+                                                <div class="row" style="margin-top:20px">
+                                                    <div class="form-group col-md-3 mb-2">
+                                                        <a href="@Url.Action("AddClassOption", "MasterData",new { Area = "Admin", id= 0})" id="btn-add-tour" class="btn btn-primary">
+                                                            <i class="fa-solid fa-plus"></i>  Add
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div id="dataList">
+                                                    <div class="col-lg-12">
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="table-responsive" style="margin-top:20px">
+                                                                    <table class="table customize-table table-bordered mb-0 v-middle">
+                                                                        <thead class="table-light">
+                                                                            <tr>
+                                                                                <th>
+                                                                                    Id
+                                                                                </th>
+                                                                                <th>
+                                                                                    Name
+                                                                                </th>
+                                                                                <td>
+                                                                                    Description
+                                                                                </td>
+                                                                                <td>
+                                                                                    Is Active
+                                                                                </td>
+                                                                                <td>
+                                                                                    Is Deleted
+                                                                                </td>
+                                                                                <td>Actions</td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @if (Model is not null && Model.Count > 0)
+                                                                            {
+                                                                                foreach (var item in Model)
+                                                                                {
+                                                                                    <tr>
+
+                                                                                        <td>@item.Id </td>
+                                                                                        <td>@item.Name </td>
+                                                                                        <td>@item.Description </td>
+                                                                                        <td>@item.IsActive </td>
+                                                                                        <td>@item.IsDeleted </td>
+                                                                                        <td>
+                                                                                            <a href="#" class="link" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                                <i class="fa-solid fa-ellipsis"></i>
+                                                                                            </a>
+                                                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                                <li><a class="dropdown-item" href="@Url.Action("AddClassOption", "MasterData", new { Area = "Admin", id= item.Id})" data-id="@item.Id"><i class="fa-solid fa-pen"></i> Edit </a></li>
+                                                                                                <li>
+                                                                                                    <a class="dropdown-item btn-delete" href="javascript:void(0)" data-id="@item.Id">
+                                                                                                        @if (item.IsDeleted)
+                                                                                                        {
+                                                                                                            <i class="fa-solid fa-trash-arrow-up"></i>
+                                                                                                            <span>Restore</span>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <i class="fa-solid fa-trash"></i>
+                                                                                                            <span>Delete</span>
+                                                                                                        }
+                                                                                                    </a>
+                                                                                                </li>
+
+                                                                                            </ul>
+
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <tr>
+                                                                                    <td colspan="6">
+                                                                                        <div class="text-center">
+                                                                                            <h5 class="card-title">No data Found</h5>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+
+        $('.btn-delete').on('click', function () {
+            var Id = $(this).data("id")
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/MasterData/SwitchDeleteClassOption',
+                dataType: 'JSON',
+                data: { id: Id },
+                success: function (content, strStatus) {
+                    showSuccessMessage(content.message, function () {
+                        location.reload();
+                    })
+
+                },
+                error: function (xhr, status, error) {
+                    showErrorMessage(error)
+                }
+            });
+        });
+    </script>
+}

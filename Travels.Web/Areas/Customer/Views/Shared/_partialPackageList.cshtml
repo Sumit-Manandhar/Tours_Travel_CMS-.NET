@@ -1,0 +1,138 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@using Travels.Models.Common
+@using Travels.Utility.Extensions
+@model List<PackageDetailViewModel>
+
+@{
+    var defaultImg = "assets/images/tours/tour-3-5.jpg";
+}
+<section class="tour-listing-one" style="background-image: url(/assets/images/backgrounds/tour-bg-1.jpg);" id="tour">
+    <div class="container">
+        <div class="sec-title text-center">
+            <p class="sec-title__tagline">Featured tours</p>
+            <h2 class="sec-title__title">Most Favorite Tour Place</h2>
+        </div>
+        @if (Model != null && Model.Any())
+        {
+            var carouselSettings = new
+            {
+                items = 3,
+                margin = 30,
+                smartSpeed = 700,
+                loop = false,
+                autoplay = 6000,
+                nav = false,
+                dots = true,
+                navText = new string[] { "<span class=\"fa fa-angle-left\"></span>", "<span class=\"fa fa-angle-right\"></span>" },
+                responsive = new { _0 = new { items = 1 }, _768 = new { items = 2 }, _1200 = new { items = 3 } }
+            
+            };
+
+            <div class="tour-listing-one__carousel vietjet-owl__carousel vietjet-owl__carousel--basic-nav vietjet-owl__carousel--with-shadow owl-theme owl-carousel" data-owl-options='{
+                 "items" : 3,
+                 "margin" : 30,
+                 "smartSpeed" : 700,
+                 "loop" :false,
+                 "autoplay" : 6000,
+                 "nav" :false,
+                 "dots" :true,
+                 "navText" : ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
+                "responsive":{
+                    "0":{
+                        "items": 1
+                    },
+                    "768":{
+                        "items": 2
+                    },
+                    "1200":{
+                        "items": 3
+                    }
+                }
+                }'>
+              
+                @foreach (var package in Model)
+                {
+                    var packageUrl = "/" + (string.IsNullOrWhiteSpace(package.ImgUrl) ? defaultImg : package.ImgUrl);
+                    var detailUrl = Url.Action("Detail", "Package", new { Area = "Customer", Id = package.Id });
+                    var item = package.Images.Select(x => new ImageGalleryOption { src = "/" + x }).ToList();
+                    if( item == null || item.Count ==0)
+                    {
+                        item = new List<ImageGalleryOption>() { new ImageGalleryOption { src = packageUrl } };
+
+                    }
+                    var galleryOption = new
+                    {
+                        Items = item,
+                        Type = "image",
+                        Gallery = new { Enabled = true },
+                    };
+
+                    <div class="item">
+                        <div class="tour-listing__card">
+                            <a href="javascript:void(0)" class="tour-listing__card-image-box">
+                                <img src="@packageUrl" alt="@package.Name" class="tour-listing__card-image" style="aspect-ratio:1.5">
+                                @*<div class="tour-listing__card-btn-group">
+                        <div class="tour-listing__card-discount">10% Off</div>
+                        <div class="tour-listing__card-featured">Featured</div>
+                        </div> *@
+                                <div class="tour-listing__card-image-overlay"></div>
+                            </a>
+
+                            <div class="tour-listing__card-content">
+                                <div class="tour-listing__card-camera-group">
+                                    <a href="javascript:void(0);" class="tour-listing__card-camera-btn vietjet-image-popup"
+                                       data-gallery-options='@Json.Serialize(galleryOption)'>
+                                        <span class="icon-photo-camera-1"></span>
+                                    </a>
+                                </div>
+                                <h3 class="tour-listing__card-title">
+                                    <a href="@detailUrl">
+                                        @package.Name
+                                    </a>
+                                </h3>
+                                <p class="tour-listing__card-text text-small">
+                                    @Html.Raw(package.PackageSummary.TruncateWithLink(200, detailUrl))
+                                </p>
+                                <div class="tour-listing__card-inner-content">
+                                    <div class="tour-listing__card-review-box">
+                                        <span class="icon-star"></span>
+                                        <p class="tour-listing__card-review-text text-small">@package.Rating.FormatAsRating() @* (30 Reviews) *@</p>
+                                    </div>
+                                    @if (package.IsGroupBooking){
+                                        <div class="tour-listing__card-review-box">
+                                            <span class="icon-calendar-5"></span>
+                                            <p class="tour-listing__card-review-text text-small">@package.StartDate.ddMMMMyyyyFormat() @* (30 Reviews) *@</p>
+                                        </div>
+                                    }
+                                    <div class="tour-listing__card-location-box">
+                                        <span class="icon-location-1"></span>
+                                        <p class="tour-listing__card-location-text text-small">
+                                            @package.Country
+                                        </p>
+                                    </div>
+                                    <div class="tour-listing__card-divider"></div>
+                                    <div class="tour-listing__card-bottom">
+                                        <div class="tour-listing__card-bottom-left">
+                                            <div class="tour-listing__card-day">
+                                                <span class="icon-clock-1"></span>
+                                                <p class="tour-listing__card-day-text text-small">@package.Day Days</p>
+                                            </div>
+                                            <div class="tour-listing__card-people">
+                                                <span class="icon-Duration"></span>
+                                                <p class="tour-listing__card-people-text text-small">2</p>
+                                            </div>
+                                        </div>
+                                        @* <div class="tour-listing__card-bottom-right">
+                                <h4 class="tour-listing__card-price"><small>SGD</small> 499</h4>
+                                </div> *@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+</section>

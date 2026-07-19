@@ -1,0 +1,28 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model List<HotelPackageViewModel>
+
+@if (Model != null && Model.Any())
+{
+    <div class="tour-listing-details__sidebar-post-box tour-listing-details__sidebar-single wow animated fadeInUp" data-wow-delay="0.1s" data-wow-duration="1500ms">
+        <h3 class="tour-listing-details__sidebar-title tour-listing-details__sidebar-post-title">Hotels</h3>
+        <ul class="tour-listing-sidebar-post">
+            @foreach (var hot in Model)
+            {
+                var imgUrl = "/" + hot.Url;
+                <li class="tour-listing-sidebar-post__item">
+                    <div class="tour-listing-sidebar-post__image">
+                        <img src="@imgUrl" alt="last-post" style="width: 100px;">
+                    </div>
+                    <div class="tour-listing-sidebar-post__content">
+                        @* <p class="tour-listing-sidebar-post__price">$380</p> *@
+                        <h5 class="tour-listing-sidebar-post__link"><a href="javascript:void(0);">@hot.HotelName</a></h5>
+                        <div class="tour-listing-sidebar-post__location">
+                            <span class="icon-location-1"></span>
+                            <p class="tour-listing-sidebar-post__location-text text-small">@hot.AddressLine, @hot.City, @hot.Country</p>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
