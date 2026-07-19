@@ -1,0 +1,26 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model List<PackageItineraryViewModel>
+
+@if (Model is not null && Model.Count > 0)
+{
+    <div class="tour-listing-details__plan">
+        <div class="tour-listing-details__plan">
+            <h3 class="tour-listing-details__title tour-listing-details__plan-title">Tour Plan</h3>
+            <div class="vietjet-accrodion tour-listing-details__faq" data-grp-name="tour-listing-details__faq">
+                @foreach (var (itinerary, i) in Model.Select((itinerary, i) => (itinerary, i)))
+                {
+                    <div class="accrodion wow animated fadeInUp @(i ==0 ?"active":"")" data-wow-delay="0.1s" data-wow-duration="1500ms">
+                        <div class="accrodion-title">
+                            <h4><span>Day @itinerary.Day</span> @itinerary.Name </h4>
+                        </div>
+                        <div class="accrodion-content">
+                            <div class="inner">
+                                @Html.Raw(itinerary.Description)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

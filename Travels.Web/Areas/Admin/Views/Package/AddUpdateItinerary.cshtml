@@ -1,0 +1,114 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model ItineraryAddUpdateModel
+@{
+    ViewData["Title"] = "AddUpdateItinerary";
+}
+
+<div class="modal fade" id="addUpdateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add/Update Itinerary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="AddUpdateItinerary" asp-controller="Package" method="post" class="row" id="saveItineraryForm">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.PackageDetailId)
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-2 col-form-label">Day</label>
+                            <input type="text" asp-for="Day" class="form-control" placeholder="Day">
+                            @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-2 col-form-label">Name</label>
+                            <input type="text" asp-for="Name" class="form-control" placeholder="Name">
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="IsPublished">
+                                <label class="form-check-label" asp-for="IsPublished">
+                                    Published
+                                </label>
+                            </div>
+                        </div>                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="IsActive">
+                                <label class="form-check-label" asp-for="IsActive">
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Id > 0)
+                    {
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" asp-for="IsDeleted">
+                                    <label class="form-check-label" asp-for="IsDeleted">
+                                        Delete
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-md-12">
+                        <label for="inputText" class="col-sm-2 col-form-label">Description</label>
+                        <textarea class="form-control" asp-for="Description"> </textarea>
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </form>
+
+
+
+                <table id="tblBlockAirline">
+                    <thead>
+                        <tr>
+                            <td>dasd</td>
+                            <td>asdasd</td>
+                            <td>asdas</td>
+                        </tr>
+                        
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                <input type="text" name="AC.field1" />
+
+                            </td>
+                            <td>
+                                <textarea  name="AC.Field2" id="ACtextEdi"class="form-control requiredField textEditor" > </textarea>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" data-action="add-row">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" data-action="delete-row" style="display:none;">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addUpdateItinerary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

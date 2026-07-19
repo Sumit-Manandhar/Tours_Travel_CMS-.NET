@@ -1,0 +1,199 @@
+﻿@using Travels.Utility.Extensions
+@model Travels.Models.Package.DataTransferObjects.PackageBookingViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">Booking details</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item active"> Bookings</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-2">
+            <div class="container mt-4">
+
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Package Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Package ID</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.PackageId)</dd>
+                                    <dt class="col-sm-5">Package Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Name)</dd>
+                                    <dt class="col-sm-5">Package Code</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Code)</dd>
+                                    <dt class="col-sm-5">Package Duration</dt>
+                                    <dd class="col-sm-7">@Model.Day Day @Model.Night Night</dd>
+                                    @if (Model.IsGroupBooking)
+                                    {
+                                        <dt class="col-sm-5">Start Date</dt>
+                                        <dd class="col-sm-7">@Model.StartDate.ddMMyyyy()</dd>
+                                    }
+                                    <dt class="col-sm-5">Arrival Date</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ArrivalDate)</dd>
+                                    <dt class="col-sm-5">Departure Date</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.DepartureDate)</dd>
+                                    <dt class="col-sm-5">Destination</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Destination)</dd>
+                                    <dt class="col-sm-5">Number of Adults</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.NumberOfAdults)</dd>
+                                    <dt class="col-sm-5">Number of Children</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.NumberOfChildren)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Meal Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Vegetarian</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Vegetarian)</dd>
+                                    <dt class="col-sm-5">Non-Vegetarian</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.NonVegetarian)</dd>
+                                    <dt class="col-sm-5">Special Request</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.SpecialRequest)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Guest Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Salutation</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Salutation)</dd>
+                                    <dt class="col-sm-5">First Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.FirstName)</dd>
+                                    <dt class="col-sm-5">Last Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.LastName)</dd>
+                                    <dt class="col-sm-5">Nationality</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Nationality)</dd>
+                                    <dt class="col-sm-5">Address</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Address)</dd>
+                                    <dt class="col-sm-5">Contact Number</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ContactNumber)</dd>
+                                    <dt class="col-sm-5">Email Address</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmailAddress)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Emergency Contact</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Salutation</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencySalutation)</dd>
+                                    <dt class="col-sm-5">First Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyFirstName)</dd>
+                                    <dt class="col-sm-5">Last Name</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyLastName)</dd>
+                                    <dt class="col-sm-5">Nationality</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyNationality)</dd>
+                                    <dt class="col-sm-5">Address</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyAddress)</dd>
+                                    <dt class="col-sm-5">Contact Number</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyContactNumber)</dd>
+                                    <dt class="col-sm-5">Email Address</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyEmailAddress)</dd>
+                                    <dt class="col-sm-5">Relation</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.EmergencyRelation)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Additional Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Need Flight</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.NeedFlight)</dd>
+                                    <dt class="col-sm-5">ID</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.Id)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Status Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Is Deleted</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.IsDeleted)</dd>
+                                    <dt class="col-sm-5">Is Active</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.IsActive)</dd>
+                                    <dt class="col-sm-5">Is Published</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.IsPublished)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Audit Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Created By</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.CreatedBy)</dd>
+                                    <dt class="col-sm-5">Created Date</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.CreatedDate)</dd>
+                                    <dt class="col-sm-5">Modified By</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ModifiedBy)</dd>
+                                    <dt class="col-sm-5">Modified Date</dt>
+                                    <dd class="col-sm-7">@Html.DisplayFor(model => model.ModifiedDate)</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

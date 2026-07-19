@@ -1,0 +1,136 @@
+﻿@using Travels.Models.Package.DatabaseModel
+@using Travels.Utility.Enumerations
+@model List<PackageGroup>
+@{
+    ViewData["Title"] = "Package Group";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var packageDetailId = (int)ViewData["PackageDetailId"];
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@displayText</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index",controller,new {Area="Admin"})">@displayText</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+                <input type="hidden" id="packageDetailId" value="@packageDetailId" />
+                @await Html.PartialAsync("~/Areas/Admin/Views/Package/_partialTabList.cshtml", (int)PackageTabMenu.Group)
+
+                <div class="row">
+                    <div class="tab-content pt-2" id="GroupTabContents">
+                        <div class="tab-pane fade active show" id="Group" role="tabpanel" aria-labelledby="Group-tab">
+                            @using (Html.BeginForm("PackageGroup", controller, FormMethod.Post, new { id = "SearchForm" }))
+                            {
+                                <div class="row" style="padding:inherit">
+                                    <div class="col-lg-12">
+
+                                        <div class="row" style="margin-top:20px">
+                                            <div class="form-group col-md-3 mb-2">
+                                                <button type="button" id="btn-add" class="btn btn-primary">
+                                                    <i class="fa-solid fa-plus"></i>  Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="dataList">
+
+                                            <div class="col-lg-12">
+                                                @if (Model is not null && Model.Count > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="table-responsive" style="margin-top:20px">
+                                                                <table class="table customize-table table-bordered mb-0 v-middle">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th>
+                                                                                Order
+                                                                            </th>
+                                                                            <th>
+                                                                                Adult
+                                                                            </th>
+                                                                            <th>
+                                                                                FOC
+                                                                            </th>
+                                                                            <th>
+                                                                                S-S
+                                                                            </th>
+                                                                            <td>Actions</td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="sortable">
+                                                                        @foreach (var item in Model.OrderBy(x => x.Order))
+                                                                        {
+                                                                        <tr data-id="@item.Id">
+
+                                                                            <td>@item.Order </td>
+                                                                            <td>@item.Adult </td>
+                                                                            <td>@item.FreeOfCost </td>
+                                                                            <td>@item.SingleSupliment </td>
+                                                                            <td>
+                                                                                <a href="#" class="link" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                    <i class="fa-solid fa-ellipsis"></i>
+                                                                                </a>
+                                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                    <li>
+                                                                                        <a class="dropdown-item btn-edit" onclick="EditGroup('@item.PackageDetailId', '@item.Id')" href="javascript:void(0)">
+                                                                                            <i class="fa-solid fa-pen"></i>
+                                                                                            Edit
+                                                                                        </a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </td>
+                                                                        </tr>
+                                                                        }
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row" style="display:none;" id="submitOrderDiv">
+                                            <div class="col-md-12 text-end">
+                                                <button type="button" class="btn btn-primary" id="submitGroupOrderButton">Save Order</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/pagescripts/admin/package/packagegroup.js"></script>
+    <script>
+        var pg = new PackageGroup();
+        pg.init();
+    </script>
+}

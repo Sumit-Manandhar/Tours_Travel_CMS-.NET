@@ -1,0 +1,163 @@
+﻿@using Travels.Models.SubDestination.DataTransferObjects
+@model SubDestinationAddUpdateModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    if (Model.Id == 0)
+    {
+        Model.IsPublished = true;
+        Model.IsActive = true;
+        ViewData["Title"] = "Add";
+    }
+    else
+        ViewData["Title"] = "Edit";
+
+}
+@section Styles {
+
+    <style>
+        .image-container {
+            position: relative;
+            width: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+            .image-container img {
+                width: 100%;
+                height: auto;
+                border-radius: 20px;
+            }
+    </style>
+}
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">Sub Destinations</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","Destination",new {Area="Admin"})">@Model.DestinationName</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","SubDestination",new {Area="Admin", DestinationId=Model.DestinationId})">SubDestination</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+
+                <form asp-action="CreateUpdateSubDestination" asp-controller="SubDestination" method="post" id="createDestinationForm" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <input type="hidden" asp-for="Id" class="form-control" />
+                        <input type="hidden" asp-for="DestinationId" class="form-control" />
+                        <div class="col-md-6">
+                            <label for="inputText" class="col-sm-2 col-form-label">City</label>
+                            @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "CityName"),
+                                     new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                        </div>
+                        <input type="hidden" asp-for="SubDestinationName">
+
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">Short Description</label>
+                            <input type="text" asp-for="ShortDesc" class="form-control" placeholder="Short Description">
+                            @Html.ValidationMessageFor(model => model.ShortDesc, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">Description</label>
+                            <textarea class="form-control htmleditor" asp-for="Description"> </textarea>
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="IsActive">
+                                <label class="form-check-label" asp-for="IsActive">
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="IsPublished">
+                                <label class="form-check-label" asp-for="IsPublished">
+                                    Published
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="inputText" class="col-sm-2 col-form-label">TopDestinations</label>
+                            <textarea class="form-control htmleditor" asp-for="TopDestinations" placeholder="TopDestinations"> </textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="image-container" id="image-container">
+                                <img src="@(Model.BaseUrl+Model?.BannerImageUrl??"")" id="img-banner" alt="Banner Img">
+                            </div>
+                            <label for="inputText" class="col-sm-6 col-form-label">Banner Image</label>
+                            <input type="file" asp-for="BannerImg" class="form-control" />
+                            <input type="hidden" asp-for="BannerImageUrl" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="image-container" id="displayImgCont">
+                                <img src="@(Model?.BaseUrl+Model?.DisplayImageUrl??"")" id="img-disp" alt="display Img">
+                            </div>
+                            <label for="inputText" class="col-sm-6 col-form-label">Display Image</label>
+                            <div id="displayImgContainer" class="dropzone">
+                            </div>
+                            @*  <input type="file" asp-for="DisplayImg" class="form-control" /> *@
+                            <input type="hidden" asp-for="DisplayImageUrl" class="form-control" />
+                        </div>
+
+
+                        <div class="col-md-12">
+                            @if (Model?.AdditionalImages is not null && Model?.AdditionalImages.Count() > 0)
+                            {
+                                <div class="row">
+
+                                    @foreach (var image in Model?.AdditionalImages?.ToList())
+                                    {
+                                        <div class="col-md-3" id="@image.Key">
+                                            <div class="form-group" style="position: relative; display: inline-block;">
+                                                <img src="@("/"+image.Value)" class="img-thumbnail" style="max-width: 200px;" />
+                                                <button type="button" data-id="@image.Key" class="delete-img" style="position: absolute; top: 10px; left: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            <label for="inputText" class="col-sm-6 col-form-label">Additional Images</label>
+
+                            <div id="imageUploadContainer" class="dropzone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="@Url.Action("Index", "SubDestination", new { Area = "Admin"})" class="btn btn-secondary">Back</a>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/pagescripts/admin/subdestination/createSubdestination.js"></script>
+    <script>
+        var cd = new CreateDestination();
+        cd.init();
+    </script>
+}

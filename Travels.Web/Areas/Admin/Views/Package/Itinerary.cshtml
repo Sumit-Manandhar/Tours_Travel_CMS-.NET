@@ -1,0 +1,119 @@
+﻿@using Travels.Models.Package.DatabaseModel
+@using Travels.Utility.Enumerations
+@model List<PackageItinerary>
+
+@{
+    ViewData["Title"] = "Package Itinerary";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var packageDetailId = (int)ViewData["PackageDetailId"];
+    ViewData["Title"] = "Itinerary";
+    bool IsGroupBooking = (bool)ViewData["IsGroupBooking"];
+    var controller = IsGroupBooking ? "GroupBooking" : "Package";
+    var displayText = IsGroupBooking ? "Group Booking" : "Package";
+}
+
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">@displayText</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"> <a href="/Admin">Dashboard</a> </li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index",controller,new {Area="Admin"})">@displayText</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+                <input type="hidden" id="packageDetailId" value="@packageDetailId" />
+                @await Html.PartialAsync("~/Areas/Admin/Views/Package/_partialTabList.cshtml", (int)PackageTabMenu.Itinerary)
+
+                <div class="row">
+                    <div class="tab-content pt-2" id="itineraryTabContents">
+                        <div class="tab-pane fade active show" id="Itinerary" role="tabpanel" aria-labelledby="Itinerary-tab">
+                            @using (Html.BeginForm("Index", controller, FormMethod.Post, new { id = "SearchForm" }))
+                            {
+                                <div class="row" style="padding:inherit">
+                                    <div class="col-lg-12">
+                                        <div class="row" style="margin-top:20px">
+                                            <div class="form-group col-md-3 mb-2">
+                                                <button type="button" id="btn-add" class="btn btn-primary">
+                                                    <i class="fa-solid fa-pencil"></i>  Add / Edit
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="dataList">
+
+                                            <div class="col-lg-12">
+                                                @if (Model is not null && Model.Count > 0)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="table-responsive" style="margin-top:20px">
+                                                                <table class="table customize-table table-bordered mb-0 v-middle">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th>
+                                                                                Id
+                                                                            </th>
+                                                                            <th>
+                                                                                Day
+                                                                            </th>
+                                                                            <td>
+                                                                                Name
+                                                                            </td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @foreach (var item in Model)
+                                                                        {
+                                                                            <tr>
+
+                                                                                <td>@item.Id </td>
+                                                                                <td>@item.Day </td>
+                                                                                <td>@item.Name </td>
+                                                                               
+                                                                            </tr>
+                                                                        }
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/tableform.js"></script>
+    <script src="~/pagescripts/admin/package/PackageItinerary.js"></script>
+    <script>
+        var pi = new PackageItinerary();
+        pi.init();
+        $('#btn-add').on('click', function () {
+            var packageId = $('#packageDetailId').val()
+            window.location.href = "/Admin/@controller/AddUpdateItinerary?PackageId=" + packageId + "&Id=0"
+            //EditItinerary(packageId, 0);
+        });
+    </script>
+}

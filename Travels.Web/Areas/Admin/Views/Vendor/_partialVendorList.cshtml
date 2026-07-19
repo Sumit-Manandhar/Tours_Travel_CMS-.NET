@@ -1,0 +1,66 @@
+﻿@using Travels.Models.SupplyPartner.DatabaseModel
+@model List<SupplierDetail>
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive" style="margin-top:20px">
+                <table class="table customize-table table-bordered mb-0 v-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <td>Currency</td>
+                            <td>Address1</td>
+                            <td>Address2</td>
+                            <td>Actions</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model is not null && Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.Id </td>
+                                    <td>@item.Name </td>
+                                    <td>@item.Currency </td>
+                                    <td>@item.Address1 </td>
+                                    <td>@item.Address2 </td>
+                                    <td>
+                                        <a href="#" class="link" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li>
+                                                <a class="dropdown-item btn-delete" href="@Url.Action("Details","Vendor",new{ @area="Admin", Id=item.Id})" data-id="@item.Id">
+                                                    <i class="fa-solid fa-circle-info"></i> Detail
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="text-center">
+                                        <h5 class="card-title">No Vendors Found</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,97 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model SyncPackageDTO
+
+@{
+    Layout = null;
+    Model.DepartureDate = DateTime.Now.AddDays(1);
+    Model.CopyItinerary = true;
+    Model.CopyInclusion = true;
+    Model.CopyHotel = true;
+    Model.CopyGroup = true;
+    Model.CopyImages = true;
+    Model.CopyFlight = true;
+}
+
+<div class="modal fade" id="DepDateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Create" asp-controller="Package" method="post" id="SyncForm">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Sync to Group Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label for="inputText" class="col-sm-12 col-form-label">Departure Date</label>
+                                            <input type="date" asp-for="DepartureDate" class="form-control" placeholder="Departure Date">
+                                        </div>
+                                    </div>
+                                    <span class="text-danger">Checked Items will be Synced</span>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyInclusion">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Inclusions</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyItinerary">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Itinerary</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyHotel">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Hotels</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyGroup">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Groups and Prices</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyImages">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Images</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" asp-for="CopyFlight">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault">Flights</label>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" asp-for="Id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btn-saveSync" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

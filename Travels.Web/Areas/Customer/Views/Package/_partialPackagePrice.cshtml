@@ -1,0 +1,43 @@
+﻿@using Travels.Models.Package.DataTransferObjects
+@model PriceViewModel
+@if (Model != null && Model.PriceList != null && Model.PriceList.Any())
+{
+    <div class="wow animated fadeIn" data-wow-delay="0.1s" data-wow-duration="1500ms">
+        <h3 class="tour-listing-details__title tour-listing-details__explore-title">Price</h3>
+    </div>
+    <p class="tour-listing-details__explore-text wow animated fadeInUp" data-wow-delay="0.1s" data-wow-duration="1500ms">
+        <table class="table customize-table table-bordered mb-0 v-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>
+                        Group Size
+                    </th>
+                    @foreach (var group in Model.GroupList.OrderBy(x => x.Order))
+                    {
+                        <th>
+                            @group.Name
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cls in Model.ClassOption)
+                {
+                    <tr>
+                        <td>
+                            @cls.Name
+                        </td>
+                        @foreach (var group in Model.GroupList.OrderBy(x => x.Order))
+                        {
+                            var priceData = Model.PriceList.Where(x => x.PackageGroupId == group.Id && x.PackageClassOptionId == cls.Id).FirstOrDefault();
+                            <td>
+                                @priceData.Price SGD/adult
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </p>
+}
